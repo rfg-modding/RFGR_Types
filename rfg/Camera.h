@@ -3,6 +3,24 @@
 #include "Matrix.h"
 #include "Timestamp.h"
 
+enum camera_mode
+{
+    CAMERA_FREE_MODE = 0x0,
+    CAMERA_SLEW_MODE = 0x1,
+    CAMERA_CURSOR_MODE = 0x2,
+    CAMERA_MINI_SCRIPT_MODE = 0x3,
+    CAMERA_CUTSCENE_SCRIPT_MODE = 0x4,
+    CAMERA_DUMB_MODE = 0x5,
+    CAMERA_DEATH_MODE = 0x6,
+    CAMERA_LOOKAROUND_MODE = 0x7,
+    CAMERA_FIRST_PERSON_MODE = 0x8,
+    CAMERA_TURRET_MODE = 0x9,
+    CAMERA_THIRD_PERSON_MODE = 0xA,
+    CAMERA_TEST_SUITE_MODE = 0xB,
+    CAMERA_SATELLITE_MODE = 0xC,
+    NUM_CAMERA_MODES = 0xD,
+};
+
 const struct camera_view_table_entry
 {
     char* name;
@@ -64,24 +82,6 @@ struct camera_view_data
     float m_max_range;
     unsigned int m_effect_info_handle;
     unsigned int m_effect_handle;
-};
-
-enum camera_mode
-{
-    CAMERA_FREE_MODE = 0x0,
-    CAMERA_SLEW_MODE = 0x1,
-    CAMERA_CURSOR_MODE = 0x2,
-    CAMERA_MINI_SCRIPT_MODE = 0x3,
-    CAMERA_CUTSCENE_SCRIPT_MODE = 0x4,
-    CAMERA_DUMB_MODE = 0x5,
-    CAMERA_DEATH_MODE = 0x6,
-    CAMERA_LOOKAROUND_MODE = 0x7,
-    CAMERA_FIRST_PERSON_MODE = 0x8,
-    CAMERA_TURRET_MODE = 0x9,
-    CAMERA_THIRD_PERSON_MODE = 0xA,
-    CAMERA_TEST_SUITE_MODE = 0xB,
-    CAMERA_SATELLITE_MODE = 0xC,
-    NUM_CAMERA_MODES = 0xD,
 };
 
 struct rfg_camera

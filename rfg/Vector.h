@@ -51,6 +51,14 @@ public:
 	{
 		return (x * B.x) + (y * B.y) + (z * B.z);
 	}
+	vector operator*(const float B)
+	{
+		return this->Scale(B);
+	}
+	vector operator/(const float B)
+	{
+		return this->Scale(1.0f / B);
+	}
 	vector& operator+=(const vector& B)
 	{
 		x += B.x;
