@@ -119,3 +119,9 @@ class et_sized_native_pointer
 {
     et_sized_native_pointer_storage_type<T> m_storage;
 };
+
+template<class T, unsigned int UnkVar>
+class et_ptr_offset
+{
+    int m_offset;
+};

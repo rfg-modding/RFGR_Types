@@ -1590,7 +1590,7 @@ struct __declspec(align(4)) human_action_node_data
     bool exit_quick;
 };
 
-struct Human : Object
+struct human : object
 {
     struct raycast_hit_info_data
     {
@@ -1610,7 +1610,7 @@ struct Human : Object
         int head_manager_idx;
     };
 
-    object_stream_resource<Human::resource_dependent_data> rdd;
+    object_stream_resource<human::resource_dependent_data> rdd;
     human_flags hflags;
     human_mp_flags mp_flags;
     int last_trigger_down_frame;
@@ -1625,7 +1625,7 @@ struct Human : Object
     human_path_data pf;
     vector turnto_target;
     unsigned int nav_cell_detour_request_handle;
-    Human::raycast_hit_info_data raycast_hit_info;
+    human::raycast_hit_info_data raycast_hit_info;
     vector velocity;
     vector actual_velocity;
     int transform_frames_skipped;
@@ -1794,7 +1794,7 @@ struct Human : Object
     timestamp voice_time_since_finish;
     lipsync_data_handle lipsync_handle;
     timestamp voice_delay_time;
-    bool(__cdecl* voice_delay_cb)(Human*, void*);
+    bool(__cdecl* voice_delay_cb)(human*, void*);
     void* voice_delay_cb_data;
     timestamp acknowledged_time;
     timestamp reported_timer;

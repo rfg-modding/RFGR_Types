@@ -65,7 +65,7 @@ struct __declspec(align(8)) world
     vector level_back_ambient;
     char last_loaded_territory[64];
     int max_world_objects;
-    base_array<Object*> all_objects;
+    base_array<object*> all_objects;
     base_array<unsigned short> type_objects[53];
     base_array<unsigned short> subtype_objects[11];
     float tech_level;
@@ -74,8 +74,8 @@ struct __declspec(align(8)) world
     char object_handle_hash[64]; //dynamic_uint_hash_table<object *> object_handle_hash; //64
     char destroyed_object_table[8198]; //hash_table<unsigned int, &hash_uint, 1024, unsigned short> destroyed_object_table; //8198
     void* save_file; //cfile* save_file; //4
-    Object* flagged_objects;
-    Object* current_flagged_object;
+    object* flagged_objects;
+    object* current_flagged_object;
     char current_flagged_mode;
     world_deserialize_state deserialize_state;
     void* deserialize_pool; //virtual_mempool* deserialize_pool; //4

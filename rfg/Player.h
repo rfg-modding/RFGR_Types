@@ -1,7 +1,7 @@
 #pragma once
 #include "Human.h"
 
-struct Player : Human
+struct player : human
 {
 
 };

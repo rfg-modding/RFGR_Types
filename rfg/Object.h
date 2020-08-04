@@ -78,6 +78,16 @@ enum object_sub_type : uint8_t
     NUM_OBJECT_SUB_TYPES = 0xB,
 };
 
+enum object_spawn_priority
+{
+    SPAWN_PRIORITY_INVALID = 0xFFFFFFFF,
+    SPAWN_PRIORITY_LOW = 0x0,
+    SPAWN_PRIORITY_MEDIUM = 0x1,
+    SPAWN_PRIORITY_HIGH = 0x2,
+    SPAWN_PRIORITY_SPECIAL = 0x3,
+    NUM_SPAWN_PRIORITIES = 0x4,
+};
+
 struct ContactNode //16
 {
     unsigned int m_contacted_object; //4
@@ -127,15 +137,15 @@ struct object_flags //23 * 1 = 23 Bytes
 	__int8 render_flags : 4;
 };
 
-struct Object
+struct object
 {
     //objectVtbl* vfptr;
     void* vfptr;
     vector pos;
     matrix orient;
-    Object* child_ptr;
-    Object* child_next;
-    Object* child_prev;
+    object* child_ptr;
+    object* child_next;
+    object* child_prev;
 
     //constraint* child_constraint_ptr;
     //constraint* host_constraint_ptr;
@@ -151,8 +161,8 @@ struct Object
     char mp_dcmo_index;
     int checking_reset;
     unsigned __int16 name_index;
-    Object* flagged_next;
-    Object* flagged_prev;
+    object* flagged_next;
+    object* flagged_prev;
     unsigned int handle;
     unsigned int parent;
     //havok_bpo* bp_handle;
@@ -167,4 +177,4 @@ struct Object
     unsigned int srid;
 };
 
-static_assert(sizeof(Object) == 156, "Object failed the static size check!");
+static_assert(sizeof(object) == 156, "object failed the static size check!");
