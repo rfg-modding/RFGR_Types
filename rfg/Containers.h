@@ -7,43 +7,43 @@ class base_array
 public:
     T& operator[](int Index)
     {
-        return Elements[Index];
+        return arrayStart_[Index];
     }
-    int Size() { return NumberOfElements; }
-    int Length() { return NumberOfElements; }
-    int Capacity() { return ArraySize; }
+    int Size() { return numberOfElements_; }
+    int Length() { return numberOfElements_; }
+    int Capacity() { return capacity_; }
 
     //Returns pointer to start of elements
-    T* begin() { return Elements; }
+    T* begin() { return arrayStart_; }
 
     //Returns pointer to start of elements
-    const T* begin() const { return Elements; }
+    const T* begin() const { return arrayStart_; }
 
     //Returns pointer to end of elements
     //To get the last member, use back() instead.
-    T* end() { return Elements + ArraySize; }
+    T* end() { return arrayStart_ + capacity_; }
 
     //Returns pointer to end of elements
     //To get the last member, use back() instead.
-    const T* end() const { return Elements + ArraySize; }
+    const T* end() const { return arrayStart_ + capacity_; }
 
     //Returns reference to first member of elements
-    T& front() { return *Elements; }
+    T& front() { return *arrayStart_; }
 
     //Returns reference to first member of elements
-    const T& front() const { return *Elements; }
+    const T& front() const { return *arrayStart_; }
 
     //Returns reference to last member of elements
-    T& back() { return Elements[ArraySize - 1]; }
+    T& back() { return arrayStart_[capacity_ - 1]; }
 
     //Returns reference to last member of elements
-    const T& back() const { return Elements[ArraySize - 1]; }
+    const T& back() const { return arrayStart_[capacity_ - 1]; }
 
 private:
     void* VirtualFunctionPointer;
-    T* Elements;
-    int ArraySize;
-    int NumberOfElements;
+    T* arrayStart_;
+    int capacity_;
+    int numberOfElements_;
 };
 
 //Todo: Reverse the constructor for this to make sure this is correct.

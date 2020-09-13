@@ -45,6 +45,20 @@ enum cf_error_codes
     CF_ERROR_NUM_CODES = 0x4,
 };
 
+enum vlib_platform
+{
+    PLATFORM_NONE = 0xFFFFFFFF,
+    PLATFORM_PC = 0x0,
+    PLATFORM_PS2 = 0x1,
+    PLATFORM_PS3 = 0x2,
+    PLATFORM_XBOX = 0x3,
+    PLATFORM_XBOX2 = 0x4,
+    PLATFORM_XBONE = 0x5,
+    PLATFORM_PS4 = 0x6,
+    PLATFORM_SWITCH = 0x7,
+    NUM_VLIB_PLATFORMS = 0x8,
+};
+
 //union cfile_handle //$E6E582DEAE142D71F38CAABECEAEA2E0
 //{
 //    cf_keen_open_file* m_standard_fp;
