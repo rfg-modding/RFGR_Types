@@ -2,6 +2,8 @@
 #include "Object.h"
 #include "Timestamp.h"
 #include "Containers.h"
+#include "Ui.h"
+#include "String.h"
 
 enum human_movement_states
 {
@@ -1540,11 +1542,6 @@ struct human_combat
     unsigned int reserved_turret;
     timestamp not_undercover_timestamp;
     timestamp pain_sound_timestamp;
-};
-
-struct checksum_stri
-{
-    unsigned int checksum;
 };
 
 struct inv_item_info
