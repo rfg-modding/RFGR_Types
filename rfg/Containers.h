@@ -87,6 +87,11 @@ class circ_array
 template<class T>
 class object_stream_resource
 {
+public:
+    bool Loaded() { return m_loaded; }
+    T* GetData() { return m_loaded ? &m_data : nullptr; }
+
+private:
     T m_data;
     bool m_loaded = false;
 };
@@ -123,5 +128,6 @@ class et_sized_native_pointer
 template<class T, unsigned int UnkVar>
 class et_ptr_offset
 {
+public:
     int m_offset;
 };

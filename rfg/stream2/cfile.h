@@ -81,3 +81,43 @@ struct cfile
     unsigned int max_write_size;
     unsigned int m_flags;
 };
+
+static string to_string(cf_search_types value)
+{
+    switch (value)
+    {
+    case CF_SEARCH_NONE:
+        return "CF_SEARCH_NONE";
+    case CF_SEARCH_STANDARD:
+        return "CF_SEARCH_STANDARD";
+    case CF_SEARCH_PACKFILE:
+        return "CF_SEARCH_PACKFILE";
+    case CF_SEARCH_VDIR:
+        return "CF_SEARCH_VDIR";
+    case CF_SEARCH_NUM_TYPES:
+        return "CF_SEARCH_NUM_TYPES";
+    default:
+        return "INVALID_ENUM";
+    }
+}
+
+static string to_string(cf_io_media_types value)
+{
+    switch (value)
+    {
+    case CF_IO_MEDIA_NONE:
+        return "CF_IO_MEDIA_NONE";
+    case CF_IO_MEDIA_HDD:
+        return "CF_IO_MEDIA_HDD";
+    case CF_IO_MEDIA_DVD:
+        return "CF_IO_MEDIA_DVD";
+    case CF_IO_MEDIA_HOST:
+        return "CF_IO_MEDIA_HOST";
+    case CF_IO_MEDIA_MEMORY:
+        return "CF_IO_MEDIA_MEMORY";
+    case CF_IO_MEDIA_NUM_TYPES:
+        return "CF_IO_MEDIA_NUM_TYPES";
+    default:
+        return "INVALID_ENUM";
+    }
+}
