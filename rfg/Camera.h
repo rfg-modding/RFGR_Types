@@ -21,6 +21,44 @@ enum camera_mode
     NUM_CAMERA_MODES = 0xD,
 };
 
+struct weight_times
+{
+    float time;
+    float wobble;
+    float destable;
+    float wander;
+    float jitter;
+    float oscillate1;
+    float oscillate2;
+    float direct;
+    float wander_direct;
+    float blur;
+    float controller_vibration_strong;
+    float controller_vibration_weak;
+};
+
+struct camera_shake
+{
+    char name[32];
+    int foley_ref;
+    int foley_play_id;
+    vector wobble;
+    float wobble_variation;
+    vector destable;
+    float destable_frequency;
+    vector wander;
+    float wander_frequency;
+    vector jitter;
+    vector oscillate1;
+    float oscillate1_frequency;
+    vector oscillate2;
+    float oscillate2_frequency;
+    vector direct;
+    vector wander_direct;
+    weight_times weights[10];
+    int num_weights;
+};
+
 const struct camera_view_table_entry
 {
     char* name;

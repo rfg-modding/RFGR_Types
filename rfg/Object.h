@@ -88,6 +88,12 @@ enum object_spawn_priority
     NUM_SPAWN_PRIORITIES = 0x4,
 };
 
+struct object_render_distance
+{
+    float apparent_distance;
+    int last_frame_processed;
+};
+
 struct ContactNode //16
 {
     unsigned int m_contacted_object; //4

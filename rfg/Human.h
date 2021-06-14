@@ -4,6 +4,7 @@
 #include "Containers.h"
 #include "Ui.h"
 #include "String.h"
+#include "Item.h"
 
 enum human_movement_states
 {
@@ -1302,12 +1303,6 @@ struct __declspec(align(8)) human_path_data
     human_path_data_flags flags;
 };
 
-struct object_render_distance
-{
-    float apparent_distance;
-    int last_frame_processed;
-};
-
 struct character_instance
 {
     struct resource_dependent_data
@@ -1542,20 +1537,6 @@ struct human_combat
     unsigned int reserved_turret;
     timestamp not_undercover_timestamp;
     timestamp pain_sound_timestamp;
-};
-
-struct inv_item_info
-{
-    char* name;
-    checksum_stri name_checksum;
-    char* display_name;
-    int cost;
-    int default_count;
-    int max_item;
-    char* description;
-    void* w_info; //weapon_info* w_info;
-    char item_order;
-    bool(__cdecl* use)();
 };
 
 struct inventory_item

@@ -3,6 +3,8 @@
 #include "String.h"
 #include "Human.h"
 #include "Explosion.h"
+#include "Item.h"
+#include "Camera.h"
 
 enum weapon_trigger_type
 {
@@ -92,11 +94,65 @@ enum air_bomb_handle
     AIR_BOMB_HANDLE_FORCE_TO_32_BIT = 0x7FFFFFFF,
 };
 
-//struct $4CC5F1CDA5212CF270796B525117DA23
-struct weapon_projectile_info
+struct aim_drift_profile
 {
-    //Todo: Set type
-    void* obj_item_info; //item_info* obj_item_info;
+    char name[64];
+    int min_change_direction_time;
+    int max_change_direction_time;
+    int acquire_time;
+    float max_acquire_penalty;
+    float offscreen_penalty;
+    float player_penalty;
+    float player_in_cover_penalty;
+    float my_speed_penalty;
+    float target_speed_penalty;
+    float kneeling_bonus_pct;
+    float return_fire_bonus_pct;
+    float min_horizontal_error;
+    float max_horizontal_error;
+    float max_grow_rate;
+    float max_decay_rate;
+    float pos_vertical_scale;
+    float neg_vertical_scale;
+    float max_vertical_error_dist;
+};
+
+const struct weapon_firing_pattern
+{
+    struct control_point
+    {
+        float range_pct;
+        float min_burst_size;
+        float max_burst_size;
+        float min_interval;
+        float max_interval;
+    };
+    struct ammo_point
+    {
+        float ammo_pct;
+        float min_effective_range;
+    };
+    struct modifier
+    {
+        float multiplier;
+        float adjustment;
+    };
+
+    char* name;
+    weapon_firing_pattern::control_point points[8];
+    int num_control_points;
+    weapon_firing_pattern::ammo_point ammo_points[3];
+    int num_ammo_points;
+    weapon_firing_pattern::modifier alert_mod;
+    weapon_firing_pattern::modifier flyer_mod;
+    weapon_firing_pattern::modifier heavy_vehicle_mod;
+    weapon_firing_pattern::modifier normal_vehicle_mod;
+    weapon_firing_pattern::modifier covering_fire_mod;
+};
+
+struct weapon_projectile_info //$4CC5F1CDA5212CF270796B525117DA23
+{
+    item_info* obj_item_info;
     float start_speed;
     float max_speed;
     float acceleration;
@@ -114,8 +170,7 @@ struct weapon_projectile_info
     float time_until_prop_expire;
     float time_until_drop;
     unsigned int damage_effect;
-    //Todo: Set type
-    void* hit_camera_shake; //camera_shake* hit_camera_shake;
+    camera_shake* hit_camera_shake;
 };
 
 struct weapon_info_flags
@@ -153,10 +208,8 @@ struct weapon_info
     int unique_id;
     weapon_info_flags flags;
     weapon_class_type weapon_class;
-    //Todo: Set type
-    void* weapon_obj_item_info; //item_info* weapon_obj_item_info;
-    //Todo: Set type
-    void* weapon_inv_item_info; //inv_item_info* weapon_inv_item_info;
+    item_info* weapon_obj_item_info;
+    inv_item_info* weapon_inv_item_info;
     human_teams default_team;
     char* icon_name;
     char* small_icon_name;
@@ -171,12 +224,10 @@ struct weapon_info
     unsigned int secondary_special_effect;
     unsigned int overheated_effect;
     unsigned int tracer_effect;
-    //Todo: Set type
-    void* fire_camera_shake; //camera_shake* fire_camera_shake;
+    camera_shake* fire_camera_shake;
     bool fire_camera_shake_ignore_disabled;
-    //Todo: Set type
-    void* secondary_camera_shake; //camera_shake* secondary_camera_shake;
-    void* player_hit_camera_shake; //camera_shake* player_hit_camera_shake;
+    camera_shake* secondary_camera_shake;
+    camera_shake* player_hit_camera_shake;
     char attachment_point[32];
     int fire_sound;
     int secondary_sound;
@@ -193,10 +244,8 @@ struct weapon_info
     float max_engagement_dist;
     float min_engagement_dist;
     float max_ai_penetrating_dist;
-    //Todo: Set type
-    void* npc_firing_pattern; //weapon_firing_pattern* npc_firing_pattern;
-    //Todo: Set type
-    void* npc_aim_drift_profile; //aim_drift_profile* npc_aim_drift_profile;
+    weapon_firing_pattern* npc_firing_pattern;
+    aim_drift_profile* npc_aim_drift_profile;
     weapon_trigger_type trigger_type;
     weapon_ammo_type ammo_type;
     unsigned __int16 magazine_size;
@@ -314,4 +363,150 @@ struct air_bomb
     float left_over_time;
     bool attacking;
     unsigned int force_attack_handle;
+};
+
+enum weapon_callback_idx
+{
+    INVALID_WEAPON_CB_IDX = 0xFFFFFFFF,
+    WEAPON_CB_IDX_PRESS_TRIGGER = 0x0,
+    WEAPON_CB_IDX_RELEASE_TRIGGER = 0x1,
+    WEAPON_CB_IDX_READY_TO_FIRE = 0x2,
+    WEAPON_CB_IDX_CAN_FIRE = 0x3,
+    WEAPON_CB_IDX_POST_FIRE = 0x4,
+    NUM_WEAPON_CB_IDX = 0x5,
+};
+
+struct weapon;
+struct weapon_callbacks
+{
+    bool(__cdecl* func)(weapon_callback_idx, weapon*, unsigned int);
+    unsigned int user_handle;
+};
+
+struct mp_fire_info_flags
+{
+    union flags_union //$E89E83DC7B0A3B57C1E8BDC492E17C6D
+    {
+        struct flags_bitfield //$38737281F511CDB066E9B5C23F0F4E63
+        {
+            __int8 local_fire : 1;
+            __int8 trigger_single : 1;
+            __int8 hit_player : 1;
+            __int8 from_server : 1;
+            __int8 sim_bullet : 1;
+            __int8 send_packet : 1;
+        };
+
+        flags_bitfield bitfield;
+        char flag_data;
+    };
+
+    flags_union data;
+};
+
+enum electricity_hit_rating
+{
+    ELECTRICITY_HIT_RATING_NONE = 0x0,
+    ELECTRICITY_HIT_RATING_ALLIED_HUMAN = 0x1,
+    ELECTRICITY_HIT_RATING_WORLD = 0x2,
+    ELECTRICITY_HIT_RATING_FRIENDLY_HUMAN = 0x3,
+    ELECTRICITY_HIT_RATING_OBJECT = 0x4,
+    ELECTRICITY_HIT_RATING_DEAD_HUMAN = 0x5,
+    ELECTRICITY_HIT_RATING_HUMAN = 0x6,
+    ELECTRICITY_HIT_RATING_ELECTRIFIABLE_OBJECT = 0x7,
+    ELECTRICITY_HIT_RATING_VEHICLE = 0x8,
+    ELECTRICITY_HIT_RATING_UNFRIENDLY_HUMAN = 0x9,
+    ELECTRICITY_HIT_RATING_HOSTILE_HUMAN = 0xA,
+    NUM_ELECTRICITY_HIT_RATINGS = 0xB,
+};
+
+struct arc_welder_cache_info
+{
+    vector hit_pos;
+    vector hit_normal;
+    unsigned int hit_handle;
+    unsigned int hit_shape_key;
+    electricity_hit_rating hit_rating;
+};
+
+struct __declspec(align(4)) weapon_fire_info
+{
+    vector start_pos;
+    vector end_pos;
+    unsigned int hit_handle;
+    vector hit_pos;
+    vector hit_normal;
+    unsigned int hit_shape_key;
+    unsigned int hit_alt_body_idx;
+    int hit_bone;
+    unsigned int nearest_human;
+    weapon_info* w_info;
+    char hit_physical_material;
+    char hit_effect_material;
+    object_hit_location hit_location;
+    mp_fire_info_flags mp_flags;
+};
+
+const struct  weapon : item
+{
+    struct weapon_flags
+    {
+        __int8 fire_info_is_new : 1;
+        __int8 trigger_down : 1;
+        __int8 is_linked : 1;
+        __int8 delay_fire : 1;
+        __int8 processed_since_last_trigger_pull : 1;
+        __int8 played_dry_fire : 1;
+        __int8 playing_pickup_effect : 1;
+    };
+
+    weapon* prev;
+    weapon* next;
+    weapon_info* w_info;
+    unsigned int turret_handle;
+    timestamp weapon_fire_sound_timestamp;
+    timestamp weapon_hit_sound_timestamp;
+    timestamp one_shot_delay_timestamp;
+    int melee_combat_move_past;
+    bool melee_combat_in_combo;
+    timestamp arc_welder_post_arc_timer;
+    timestamp multi_rocket_trigger_down_timer;
+    int secondary_rockets_to_fire;
+    unsigned int mat_fx_handle[4];
+    unsigned int current_mat_fx;
+    unsigned int mat_fx_clip_handle;
+    unsigned int mat_fx_handle_for_clip;
+    weapon::weapon_flags flags;
+    weapon_callbacks cb[5];
+    weapon_fire_info fire_info;
+    int rounds_in_magazine;
+    int rounds_in_reserve;
+    float current_spread;
+    char tracer_count;
+    float refire_delay_time;
+    float overheat_percent;
+    bool overheated;
+    unsigned int overheated_effect_handle;
+    timestamp reload_delay_timer;
+    timestamp last_fired_timer;
+    float muzzle_flash_intensity;
+    unsigned int muzzle_flash_effect_handle;
+    unsigned int muzzle_smoke_effect_handle;
+    timestamp muzzle_smoke_timestamp;
+    int grip_tag_index;
+    int secondary_grip_tag_index;
+    int destruction_tag_index;
+    int secondary_destruction_tag_index;
+    int muzzle_tag_index;
+    int melee_blood_effect_tag_index;
+    int num_rounds_fired;
+    int fire_sound_alr_id;
+    int secondary_sound_id;
+    int special_sound_id;
+    int weapon_persona;
+    float grinder_speed_percent;
+    float grinder_heat_effect;
+    unsigned int special_effect_handle;
+    unsigned int secondary_special_effect_handle;
+    farray<arc_welder_cache_info, 3> arc_welder_best_point;
 };

@@ -1,5 +1,4 @@
 #pragma once
-
 #include <d3d11_1.h>
 #include <DXGI.h>
 #include <d3d11.h>
@@ -108,18 +107,18 @@ namespace keen
         PixelFormat_Dxt45_Gamma = 0x6,
     };
 
-    struct GraphicsStateObject
-    {
-        unsigned int hash;
-        unsigned int refCount;
-    };
-
     struct VertexAttributeDescription
     {
         char id;
         char format;
         char inputStreamIndex;
         char instanceStepRate;
+    };
+
+    struct GraphicsStateObject
+    {
+        unsigned int hash;
+        unsigned int refCount;
     };
 
     struct VertexFormat : keen::GraphicsStateObject
@@ -130,6 +129,23 @@ namespace keen
         unsigned int attributeIndices[17];
         unsigned int streamStride[6];
         unsigned int instanceDataStreamIndex;
+    };
+
+    struct RenderGeometry
+    {
+        keen::VertexFormat* pVertexFormat;
+        ID3D11Buffer* pVertexBuffer;
+        unsigned int vertexCount;
+        ID3D11Buffer* pIndexBuffer;
+        unsigned int indexCount;
+        //Todo: Add type
+        void* pSkinGeometry; //keen::SoftwareSkinGeometry* pSkinGeometry;
+        unsigned int skinningBufferOffset;
+        const char* pDebugName;
+        unsigned int indexFormat;
+        unsigned int primitiveTopology;
+        //Todo: Add type
+        void* pMorphData; //keen::SoftwareMorphData* pMorphData;
     };
 
     struct TextureDescription

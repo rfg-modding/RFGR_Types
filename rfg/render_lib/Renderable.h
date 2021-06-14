@@ -5,8 +5,8 @@
 struct rl_base_object;
 struct rl_base_objectVtbl
 {
-    void* (__thiscall* __vecDelDtor)(rl_base_object*, unsigned int);
-    void(__thiscall* release)(rl_base_object*);
+    void* (__fastcall* __vecDelDtor)(rl_base_object*, void*, unsigned int);
+    void(__fastcall* release)(rl_base_object*, void*);
 };
 
 struct rl_base_object
