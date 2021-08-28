@@ -69,3 +69,18 @@ enum game_state : unsigned int
     GS_MULTIPLAYER_LIVE_FIND_SERVERS = 0x3F,
     GS_NUM_STATES = 0x40,
 };
+
+struct __declspec(align(4)) state_info
+{
+    void(__cdecl* enter)(game_state state);
+    void(__cdecl* exit)(game_state state);
+    bool(__cdecl* exit_notify)(game_state state);
+    void(__cdecl* process)();
+    void(__cdecl* handshake)(void* renderer);//void(__cdecl* handshake)(rl_renderer* renderer);
+    void(__cdecl* render)(void* renderer);//void(__cdecl* render)(rl_renderer* renderer);
+    bool transparent;
+    bool pause_beneath;
+    int user_flags;
+    bool hide_cursor;
+    bool registered;
+};
