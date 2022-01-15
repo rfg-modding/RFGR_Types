@@ -1568,6 +1568,104 @@ struct __declspec(align(4)) human_action_node_data
     bool exit_quick;
 };
 
+struct voice_persona_list
+{
+    base_array<void*> voice_list; //base_array<human_voice_persona*> voice_list;
+};
+
+struct human_info_inventory_info
+{
+    inv_item_info* i_info;
+    int count;
+    int slot;
+};
+
+struct human_info
+{
+    struct human_info_flags
+    {
+        __int8 female : 1;
+        __int8 coin : 1;
+        __int8 preload : 1;
+        __int8 officer : 1;
+        __int8 unarmed : 1;
+        __int8 vip : 1;
+        __int8 use_tech_level : 1;
+        __int8 sniper : 1;
+        __int8 elite_dodge : 1;
+        __int8 riot_shield : 1;
+        __int8 body_armor : 1;
+        __int8 nonflammable : 1;
+        __int8 no_attaching_projectiles : 1;
+        __int8 guerrilla_tech : 1;
+        __int8 guerrilla_rfc : 1;
+        __int8 old_coot : 1;
+        __int8 dan : 1;
+        __int8 jenkins : 1;
+        bool driverless_exit_only;
+    };
+    struct human_prop_info
+    {
+        item_info* item;
+        char* item_prop_tag;
+        char* character_prop_tag;
+        int character_prop_index;
+        float appearance_percent;
+        int num_sub_props;
+        human_info::human_prop_info* sub_props;
+    };
+    struct human_prop_general_info
+    {
+        char* prop_name;
+        float appearance_percent;
+        prop_type m_prop_type;
+        int num_props;
+        human_info::human_prop_info* props;
+    };
+
+    int max_hit_points;
+    int max_knockdown_hits;
+    float max_speed;
+    inv_item_info* default_equip_item;
+    inv_item_info* default_last_equip_item;
+    char* name;
+    unsigned int name_crc;
+    char* model_name;
+    char* anim_set_name;
+    unsigned int anim_set_name_crc;
+    char* rig_name;
+    unsigned int srid;
+    int slot_id;
+    float default_height_scale;
+    float height_scale_variation;
+    human_teams default_team;
+    __int16 hurt_threshold;
+    int home_district;
+    float aim_error_pct;
+    void* foot_effects;//foot_ground_effects* foot_effects;
+    int num_heads;
+    void* heads[4];//char_def_head* heads[4];
+    voice_persona_list voice_personas;
+    farray<human_info_inventory_info, 15> default_inventory;
+    int num_general_props;
+    human_info::human_prop_general_info* general_props;
+    int lower_spine_bone_index;
+    int upper_spine_bone_index;
+    int pelvis_bone_index;
+    int head_bone_index;
+    int neck_bone_index;
+    int eye_l_bone_index;
+    int eye_r_bone_index;
+    int calf_l_bone_index;
+    int calf_r_bone_index;
+    int camera_bone_index;
+    int drop_cash_min;
+    int drop_cash_max;
+    unsigned int light_effect_handle;
+    char* light_tag_names[2];
+    human_info::human_info_flags flags;
+};
+
 struct human : object
 {
     struct raycast_hit_info_data
@@ -1592,7 +1690,7 @@ struct human : object
     human_flags hflags;
     human_mp_flags mp_flags;
     int last_trigger_down_frame;
-    void* h_info; //human_info* h_info;
+    human_info* h_info;
     object_render_distance render_distance;
     char xray_material;
     char xray_render_alpha;
