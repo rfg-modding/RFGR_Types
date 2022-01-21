@@ -88,6 +88,40 @@ enum object_spawn_priority
     NUM_SPAWN_PRIORITIES = 0x4,
 };
 
+enum hierarchy_notify_code
+{
+    HN_CHILDREN_STREAMED = 0x0,
+    HN_PARENT_DESTROYED = 0x1,
+};
+
+enum obj_serialize_mode
+{
+    OSM_NONE = 0x0,
+    OSM_RESTORE = 0x1,
+    OSM_FULL = 0x2,
+};
+
+enum highlight_purpose
+{
+    HIGHLIGHT_PURPOSE_DESTROY = 0x0,
+    HIGHLIGHT_PURPOSE_NEUTRAL = 0x1,
+    HIGHLIGHT_PURPOSE_EDF = 0x2,
+    HIGHLIGHT_PURPOSE_ACTIVITY = 0x3,
+    NUM_HIGHLIGHT_PURPOSES = 0x4,
+};
+
+enum highlight_style
+{
+    HIGHLIGHT_STYLE_DEFAULT = 0xFFFFFFFF,
+    HIGHLIGHT_STYLE_NONE = 0x0,
+    HIGHLIGHT_STYLE_GLOW = 0x1,
+    HIGHLIGHT_STYLE_FRAME = 0x2,
+    HIGHLIGHT_STYLE_ARROW = 0x3,
+    HIGHLIGHT_STYLE_ARROW_FOR_PASSENGER = 0x4,
+    HIGHLIGHT_STYLE_CYLINDER = 0x5,
+    NUM_HIGHLIGHT_STYLES = 0x6,
+};
+
 struct object_render_distance
 {
     float apparent_distance;
@@ -143,23 +177,95 @@ struct object_flags //23 * 1 = 23 Bytes
 	__int8 render_flags : 4;
 };
 
+struct obj_prop_block;
+struct object;
+struct rl_renderer;
+struct hkpWorldObject;
+struct human;
+struct weapon_fire_info;
+struct weapon_info;
+
+struct objectVtbl
+{
+    //0
+    void* (__thiscall* __vecDelDtor)(object* thisPtr, unsigned int);
+    //4
+    void(__thiscall* get_bbox)(object* thisPtr, vector* bmin, vector* bmax);
+    //8
+    void(__thiscall* get_local_bbox)(object* thisPtr, vector* bmin, vector* bmax);
+    //12
+    void* unk0;//__purecall
+    //16
+    bool(__thiscall* is_killed)(object* thisPtr);
+    //20
+    bool(__thiscall* serialize)(object* thisPtr, obj_prop_block*, bool);
+    //24
+    obj_serialize_mode(__thiscall* serialize_mode)(object* thisPtr);
+    //28
+    bool(__thiscall* stream)(object* thisPtr, bool);
+    //32
+    bool(__thiscall* serialize_restore_if_missing_in_save_file)(object* thisPtr, obj_prop_block*);
+    //36
+    bool(__thiscall* serialize_restore_if_resetting_destruction)(object* thisPtr, obj_prop_block*);
+    //40
+    void(__thiscall* free_this)(object* thisPtr);
+    //44
+    void(__thiscall* destroy_notify)(object* thisPtr);
+    //48
+    void(__thiscall* update_pos_and_orient)(object* thisPtr, vector*, matrix*, bool);
+    //52
+    int(__thiscall* get_tag_index_from_name)(object* thisPtr, const char*);
+    //56
+    bool(__thiscall* get_tag_world_coords)(object* thisPtr, int, vector*, matrix*, vector*, matrix*);
+    //60
+    bool(__thiscall* get_tag_local_coords)(object* thisPtr, int, vector*, matrix*);
+    //64
+    const struct rl_renderable_mesh* (__thiscall* get_static_mesh)(object* thisPtr);
+    //68
+    void(__thiscall* update_render)(object* thisPtr, rl_renderer*);
+    //72
+    bool(__thiscall* enable_object_outline)(object* thisPtr, int);
+    //76
+    bool(__thiscall* disable_object_outline)(object* thisPtr);
+    //80
+    int(__thiscall* attach_index)(object* thisPtr, vector*, unsigned int);
+    //84
+    bool(__thiscall* attach_index_is_valid)(object* thisPtr, int);
+    //88
+    float(__thiscall* get_mass)(object* thisPtr);
+    //92
+    char(__thiscall* get_physical_material)(object* thisPtr, unsigned int, vector*, hkpWorldObject*);
+    //96
+    char(__thiscall* get_effect_material)(object* thisPtr, unsigned int, vector*, hkpWorldObject*);
+    //100
+    float(__thiscall* get_energy_scale)(object* thisPtr);
+    //104
+    void(__thiscall* process_bullet_hit)(object* thisPtr, human*, float, weapon_fire_info*);
+    //108
+    bool(__thiscall* process_melee_hit)(object* thisPtr, object*, float, vector*, vector*, vector*, unsigned int, weapon_info*);
+    //112
+    void(__thiscall* hierarchy_notify)(object* thisPtr, hierarchy_notify_code);
+    //116
+    bool(__thiscall* ready_to_stream_out)(object* thisPtr);
+    //120
+    unsigned int(__thiscall* get_alt_hk_body_handle)(object* thisPtr, unsigned int);
+    //124
+    unsigned int(__thiscall* get_alt_hk_body_handle_index)(object* thisPtr, unsigned int);
+    //128
+    void(__thiscall* pool_free)(object* thisPtr);
+};
+
 struct object
 {
-    //objectVtbl* vfptr;
-    void* vfptr;
+    objectVtbl* vfptr;
     vector pos;
     matrix orient;
     object* child_ptr;
     object* child_next;
     object* child_prev;
-
-    //constraint* child_constraint_ptr;
-    //constraint* host_constraint_ptr;
-    //attach_info_data* attach_info;
-    void* child_constraint_ptr;
-    void* host_constraint_ptr;
-    void* attach_info;
-
+    void* child_constraint_ptr; //constraint* child_constraint_ptr;
+    void* host_constraint_ptr; //constraint* host_constraint_ptr;
+    void* attach_info; //attach_info_data* attach_info;
     unsigned int havok_handle;
     object_contact_info contact_info;
     object_flags obj_flags;

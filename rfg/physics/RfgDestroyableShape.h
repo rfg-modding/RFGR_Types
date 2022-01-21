@@ -125,7 +125,7 @@ struct rfg_destroyable_instance_data
     et_ptr_offset<unsigned char, 0> buffer;
 };
 
-struct  rfg_base_destroyable_shape
+struct rfg_base_destroyable_shape
 {
     et_ptr_offset<rfg_rbb_node, 0> aabb_tree;
     et_ptr_offset<rfg_subpiece_base, 0> base_objects;

@@ -99,6 +99,7 @@ private:
 template<class T>
 class linked_list_p
 {
+public:
     T* m_head_p;
     int m_elem_count;
 };
@@ -108,6 +109,7 @@ class linked_list_p
 template<class T>
 class et_sized_native_pointer_storage_type_pointer_type
 {
+public:
     T* m_pointer;
     void* m_pointer_padding;
 };
@@ -122,6 +124,7 @@ union et_sized_native_pointer_storage_type
 template<class T>
 class et_sized_native_pointer
 {
+public:
     et_sized_native_pointer_storage_type<T> m_storage;
 };
 
