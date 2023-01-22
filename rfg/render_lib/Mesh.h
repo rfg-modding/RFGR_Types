@@ -5,13 +5,6 @@
 #include "rfg/Vector.h"
 #include "rfg/keen/GraphicsSystem.h"
 
-struct LoadedMeshInfo
-{
-    char name[64];
-    const void* pVertexBuffer;
-    const void* pIndexBuffer;
-};
-
 struct rl_render_block
 {
     unsigned __int16 material_map_idx;
@@ -86,7 +79,7 @@ struct mesh_header_shared
     et_sized_native_pointer<rl_mesh> m_mesh;
     et_sized_native_pointer<rl_material_map> m_material_map;
     et_sized_native_pointer<et_sized_native_pointer<rl_material>> m_materials;
-    unsigned int m_num_materials;
+    unsigned int m_num_materials; 
     char padding0[4];
     et_sized_native_pointer<char const> m_texture_names;
 };
