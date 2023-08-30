@@ -23,7 +23,7 @@ struct general_mover : object_mover
     unsigned int subpiece_index;
     unsigned int name_checksum;
     int gobj_index;
-    //Left out for now since RSL2 is SP only
+    //Left out for now since Reconstructor is SP only
     void* mp_sim_state; //multi_sim_state<multi_mover_state>* mp_sim_state;
     unsigned int destruction_uid;
     object_stream_resource<general_mover::resource_dependent_data> rdd;
